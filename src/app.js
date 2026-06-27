@@ -6,6 +6,17 @@ const { authMiddleware } = require("./modules/auth/auth.middleware");
 
 const app = express();
 
+// sanitize Authorization header — remove invalid characters
+app.use((req, res, next) => {
+  const auth = req.headers["authorization"];
+  if (auth) {
+    // remove any control characters (0x00-0x1F, 0x7F) and keep only printable ASCII
+    const sanitized = auth.replace(/[\x00-\x1F\x7F]/g, "").trim();
+    req.headers["authorization"] = sanitized;
+  }
+  next();
+});
+
 // security
 app.use(helmet());
 app.use(cors());
