@@ -20,4 +20,5 @@ jobs:
             cd /var/www/techsteam-api
             git reset --hard origin/main
             git pull origin main
+            pm2 restart techsteam-api --update-env
             echo "✅ techsteam-api deployed"
