@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 const controller = require("./upload.controller");
-const { authMiddleware } = require("../auth/auth.middleware");
+const { crmAuthMiddleware } = require("../middleware/crmAuth.middleware");
 
 // Multer: memory storage, 15 MB limit (matches imageOptimizer MAX_INPUT_SIZE_BYTES)
 const upload = multer({
@@ -26,7 +26,16 @@ function concurrencyLimit(req, res, next) {
   next();
 }
 
-router.use(authMiddleware);
+router.use(crmAuthMiddleware);
+
+// Алиас: crmAuthMiddleware кладёт данные в req.crmUser,
+// а контроллеры ожидают req.user — проксируем
+router.use((req, res, next) => {
+  if (req.crmUser) {
+    req.user = req.crmUser;
+  }
+  next();
+});
 
 // Универсальная загрузка файла (с оптимизацией для изображений)
 router.post("/file", concurrencyLimit, upload.single("file"), controller.uploadFile);
