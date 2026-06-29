@@ -2,13 +2,16 @@ const router = require("express").Router();
 const controller = require("./auth-crm.controller");
 const { crmAuthMiddleware, crmAdminMiddleware } = require("../middleware/crmAuth.middleware");
 
-// РџСѓР±Р»РёС‡РЅС‹Р№ вЂ” Р»РѕРіРёРЅ РґР»СЏ CRM
+// Публичный — логин для CRM
 router.post("/login", controller.login);
 
-// Р—Р°С‰РёС‰С‘РЅРЅС‹Рµ вЂ” С‚РѕР»СЊРєРѕ РґР»СЏ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРЅС‹С… СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ CRM
+// Защищённые — только для авторизованных сотрудников CRM
 router.get("/me", crmAuthMiddleware, controller.getMe);
 
-// РђРґРјРёРЅСЃРєРёРµ вЂ” СѓРїСЂР°РІР»РµРЅРёРµ СЃРѕС‚СЂСѓРґРЅРёРєР°РјРё (С‚РѕР»СЊРєРѕ SUPERADMIN/ADMIN)
+// Смена пароля (любой сотрудник может сменить свой пароль)
+router.put("/password", crmAuthMiddleware, controller.changePassword);
+
+// Админские — управление сотрудниками (только SUPERADMIN/ADMIN)
 router.get("/", crmAuthMiddleware, crmAdminMiddleware, controller.getAll);
 router.get("/:id", crmAuthMiddleware, crmAdminMiddleware, controller.getOne);
 router.post("/", crmAuthMiddleware, crmAdminMiddleware, controller.create);

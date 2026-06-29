@@ -50,3 +50,8 @@ exports.resetPassword = async (req, res) => {
     res.status(400).json({ error: e.message });
   }
 };
+// Получить всех клиентов (только для CRM-админов)
+exports.getAllMarketUsers = async (req, res) => {
+  const data = await service.getAllMarketUsers();
+  res.json(data);
+};

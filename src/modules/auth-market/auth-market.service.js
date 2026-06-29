@@ -119,3 +119,19 @@ exports.resetPassword = async (token, newPassword) => {
 
   return { ok: true };
 };
+// Получить всех клиентов B2B (для CRM)
+exports.getAllMarketUsers = async () => {
+  return prisma.marketUser.findMany({
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      phone: true,
+      createdAt: true,
+      _count: {
+        select: { orders: true, quotes: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};

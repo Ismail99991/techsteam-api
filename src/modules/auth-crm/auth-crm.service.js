@@ -78,3 +78,20 @@ exports.updateCrmUser = async (id, data) => {
 exports.deleteCrmUser = (id) => {
   return prisma.crmUser.delete({ where: { id } });
 };
+
+// Смена пароля сотрудником (самостоятельно)
+exports.changePassword = async (userId, currentPassword, newPassword) => {
+  const user = await prisma.crmUser.findUnique({ where: { id: userId } });
+  if (!user) throw new Error("User not found");
+
+  const match = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!match) throw new Error("Current password is incorrect");
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.crmUser.update({
+    where: { id: userId },
+    data: { passwordHash },
+  });
+
+  return { ok: true };
+};

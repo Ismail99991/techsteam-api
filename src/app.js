@@ -46,6 +46,20 @@ const adminRoutes = require("./modules/admin/admin.routes");
 const { crmAuthMiddleware } = require("./modules/middleware/crmAuth.middleware");
 app.use("/api/admin", crmAuthMiddleware, adminRoutes);
 
+// CRM — получение списка B2B клиентов
+const marketAuthController = require("./modules/auth-market/auth-market.controller");
+app.get("/api/market/users", crmAuthMiddleware, marketAuthController.getAllMarketUsers);
+
+// CRM — управление заявками и КП
+const ctaController = require("./modules/cta/cta.controller");
+app.get("/api/market/callback", crmAuthMiddleware, ctaController.getAllCallbacks);
+app.put("/api/market/callback/:id/status", crmAuthMiddleware, ctaController.updateCallbackStatus);
+app.get("/api/market/quote-request/all", crmAuthMiddleware, ctaController.getAllQuoteRequests);
+app.put("/api/market/quote-request/:id/status", crmAuthMiddleware, ctaController.updateQuoteRequestStatus);
+app.get("/api/market/quote-request/:id", crmAuthMiddleware, ctaController.getQuoteRequestById);
+
+
+
 // ============================================================
 // MARKET вЂ” РґР»СЏ РєР»РёРµРЅС‚РѕРІ (РѕС‚РґРµР»СЊРЅС‹Р№ JWT)
 // ============================================================

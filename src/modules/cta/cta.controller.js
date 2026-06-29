@@ -30,3 +30,41 @@ exports.getMyQuoteRequests = async (req, res) => {
   const data = await service.getMyQuoteRequests(req.marketUser.marketUserId);
   res.json(data);
 };
+// GET /api/market/callback Ч все за€вки (дл€ CRM)
+exports.getAllCallbacks = async (req, res) => {
+  const data = await service.getAllCallbacks();
+  res.json(data);
+};
+
+// PUT /api/market/callback/:id/status Ч смена статуса (дл€ CRM)
+exports.updateCallbackStatus = async (req, res) => {
+  try {
+    const data = await service.updateCallbackStatus(req.params.id, req.body.status);
+    res.json(data);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
+// GET /api/market/quote-request/all Ч все запросы  ѕ (дл€ CRM)
+exports.getAllQuoteRequests = async (req, res) => {
+  const data = await service.getAllQuoteRequests();
+  res.json(data);
+};
+
+// PUT /api/market/quote-request/:id/status Ч смена статуса (дл€ CRM)
+exports.updateQuoteRequestStatus = async (req, res) => {
+  try {
+    const data = await service.updateQuoteRequestStatus(req.params.id, req.body.status);
+    res.json(data);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
+// GET /api/market/quote-request/:id Ч один запрос  ѕ (дл€ CRM)
+exports.getQuoteRequestById = async (req, res) => {
+  const data = await service.getQuoteRequestById(req.params.id);
+  if (!data) return res.status(404).json({ error: "Not found" });
+  res.json(data);
+};

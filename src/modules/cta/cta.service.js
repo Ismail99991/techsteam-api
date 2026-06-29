@@ -41,3 +41,59 @@ exports.getMyQuoteRequests = (marketUserId) => {
     orderBy: { createdAt: "desc" },
   });
 };
+// GET /api/market/callback Ч все за€вки (дл€ CRM)
+exports.getAllCallbacks = () => {
+  return prisma.callbackRequest.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+};
+
+// PUT /api/market/callback/:id/status Ч смена статуса (дл€ CRM)
+exports.updateCallbackStatus = (id, status) => {
+  return prisma.callbackRequest.update({
+    where: { id },
+    data: { status },
+  });
+};
+
+// GET /api/market/quote-request/all Ч все запросы  ѕ (дл€ CRM)
+exports.getAllQuoteRequests = () => {
+  return prisma.quoteRequest.findMany({
+    include: {
+      product: true,
+      marketUser: {
+        select: { id: true, email: true, name: true, phone: true },
+      },
+      attachments: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
+// PUT /api/market/quote-request/:id/status Ч смена статуса (дл€ CRM)
+exports.updateQuoteRequestStatus = (id, status) => {
+  return prisma.quoteRequest.update({
+    where: { id },
+    data: { status },
+    include: {
+      product: true,
+      marketUser: {
+        select: { id: true, email: true, name: true, phone: true },
+      },
+    },
+  });
+};
+
+// GET /api/market/quote-request/:id Ч один запрос  ѕ по ID (дл€ CRM)
+exports.getQuoteRequestById = (id) => {
+  return prisma.quoteRequest.findUnique({
+    where: { id },
+    include: {
+      product: true,
+      marketUser: {
+        select: { id: true, email: true, name: true, phone: true },
+      },
+      attachments: true,
+    },
+  });
+};
