@@ -48,15 +48,15 @@ app.use("/api/admin", crmAuthMiddleware, adminRoutes);
 
 // CRM Ч получение списка B2B клиентов
 const marketAuthController = require("./modules/auth-market/auth-market.controller");
-app.get("/api/market/users", crmAuthMiddleware, marketAuthController.getAllMarketUsers);
+app.get("/api/crm/market-users", crmAuthMiddleware, marketAuthController.getAllMarketUsers);
 
 // CRM Ч управление за€вками и  ѕ
 const ctaController = require("./modules/cta/cta.controller");
-app.get("/api/market/callback", crmAuthMiddleware, ctaController.getAllCallbacks);
-app.put("/api/market/callback/:id/status", crmAuthMiddleware, ctaController.updateCallbackStatus);
-app.get("/api/market/quote-request/all", crmAuthMiddleware, ctaController.getAllQuoteRequests);
-app.put("/api/market/quote-request/:id/status", crmAuthMiddleware, ctaController.updateQuoteRequestStatus);
-app.get("/api/market/quote-request/:id", crmAuthMiddleware, ctaController.getQuoteRequestById);
+app.get("/api/crm/callback", crmAuthMiddleware, ctaController.getAllCallbacks);
+app.put("/api/crm/callback/:id/status", crmAuthMiddleware, ctaController.updateCallbackStatus);
+app.get("/api/crm/quote-request", crmAuthMiddleware, ctaController.getAllQuoteRequests);
+app.put("/api/crm/quote-request/:id/status", crmAuthMiddleware, ctaController.updateQuoteRequestStatus);
+app.get("/api/crm/quote-request/:id", crmAuthMiddleware, ctaController.getQuoteRequestById);
 
 
 
